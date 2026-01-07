@@ -39,7 +39,7 @@ jobs:
       shell: pwsh
       run: |
         # 'pyinstaller' の代わりに 'python -m PyInstaller' を使用
-        python -m PyInstaller --onefile --noconsole `
+        python -m PyInstaller --onefile --noconsole --icon=Yt_Downloader_256.ico `
           --add-binary "yt-dlp.exe;." `
           --add-binary "ffmpeg.exe;." `
           --name "YT-Downloader" `
