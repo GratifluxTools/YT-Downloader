@@ -1,0 +1,52 @@
+name: Build yt-dlp GUI App
+
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.10'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Download External Binaries (yt-dlp & ffmpeg)
+      shell: pwsh
+      run: |
+        # yt-dlp.exe のダウンロード
+        Invoke-WebRequest -Uri "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe" -OutFile "yt-dlp.exe"
+        
+        # ffmpeg.exe のダウンロード (公式のビルド済みzipから抽出)
+        Invoke-WebRequest -Uri "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip" -OutFile "ffmpeg.zip"
+        Expand-Archive -Path "ffmpeg.zip" -DestinationPath "ffmpeg_temp"
+        Get-ChildItem -Path "ffmpeg_temp" -Filter "ffmpeg.exe" -Recurse | Copy-Item -Destination "ffmpeg.exe"
+
+    - name: Build with PyInstaller
+      shell: pwsh
+      run: |
+        # --add-binary で外部exeをカレントディレクトリ(.)に同梱
+        # --noconsole でGUI起動時に黒い画面を出さない
+        pyinstaller --onefile --noconsole `
+          --add-binary "yt-dlp.exe;." `
+          --add-binary "ffmpeg.exe;." `
+          --name "YT-Downloader" `
+          downloader.py
+
+    - name: Upload Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: YT-Downloader-Windows
+        path: dist/*.exe
