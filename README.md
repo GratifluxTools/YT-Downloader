@@ -136,7 +136,7 @@ Click **Update yt-dlp** to update yt-dlp automatically.
 
 ## 📄 License / ライセンス
 
-MIT License (or your preferred license)
+MIT License
 
 ---
 
