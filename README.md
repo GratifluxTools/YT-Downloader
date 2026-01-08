@@ -2,7 +2,7 @@
 
 ![Build](https://img.shields.io/github/actions/workflow/status/GratifluxTools/YT-Downloader/build.yml)
 ![Release](https://img.shields.io/github/v/release/GratifluxTools/YT-Downloader)
-![License](https://img.shields.io/github/license/GratifluxTools/YT-Downloader/LICENSE)
+![License](https://img.shields.io/github/license/GratifluxTools/YT-Downloader)
 
 A simple and powerful GUI downloader for YouTube and supported sites, powered by **yt-dlp**, **ffmpeg**, and **PySide6**.
 You can download videos and audio, embed thumbnails and metadata, manage multiple downloads, and update yt-dlp directly from the app.
