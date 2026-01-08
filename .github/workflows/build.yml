@@ -1,13 +1,19 @@
-name: Build yt-dlp GUI App
+name: Build and Release yt-dlp GUI App
 
 on:
   push:
     branches: [ "main" ]
   workflow_dispatch:
+  # Releaseを作成したときにも実行されるように設定
+  release:
+    types: [published]
 
 jobs:
   build:
     runs-on: windows-latest
+    # リリースへの書き込み権限を付与
+    permissions:
+      contents: write
 
     steps:
     - name: Checkout code
@@ -17,20 +23,17 @@ jobs:
       uses: actions/setup-python@v5
       with:
         python-version: '3.10'
-        cache: 'pip' # キャッシュを有効にすると2回目以降が速くなります
+        cache: 'pip'
 
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
         pip install PySide6 requests pyinstaller
 
-    - name: Download External Binaries (yt-dlp & ffmpeg)
+    - name: Download External Binaries
       shell: pwsh
       run: |
-        # yt-dlp.exe のダウンロード
         Invoke-WebRequest -Uri "https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp.exe" -OutFile "yt-dlp.exe"
-        
-        # ffmpeg.exe のダウンロード
         Invoke-WebRequest -Uri "https://www.gyan.dev/ffmpeg/builds/ffmpeg-release-essentials.zip" -OutFile "ffmpeg.zip"
         Expand-Archive -Path "ffmpeg.zip" -DestinationPath "ffmpeg_temp"
         Get-ChildItem -Path "ffmpeg_temp" -Filter "ffmpeg.exe" -Recurse | Copy-Item -Destination "ffmpeg.exe"
@@ -38,15 +41,22 @@ jobs:
     - name: Build with PyInstaller
       shell: pwsh
       run: |
-        # 'pyinstaller' の代わりに 'python -m PyInstaller' を使用
         python -m PyInstaller --onefile --noconsole --icon=Yt_Downloader_256.ico `
           --add-binary "yt-dlp.exe;." `
           --add-binary "ffmpeg.exe;." `
           --name "YT-Downloader" `
           downloader.py
 
+    # 1. 開発中の確認用にArtifactsへ保存
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: YT-Downloader-Windows
-        path: dist/*.exe
+        path: dist/YT-Downloader.exe
+
+    # 2. 【追加】正式リリース時に自動でexeをReleaseページに添付
+    - name: Upload Release Asset
+      if: github.event_name == 'release'
+      uses: softprops/action-gh-release@v2
+      with:
+        files: dist/YT-Downloader.exe
