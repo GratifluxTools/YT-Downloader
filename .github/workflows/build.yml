@@ -41,7 +41,7 @@ jobs:
     - name: Build with PyInstaller
       shell: pwsh
       run: |
-        python -m PyInstaller --onefile --noconsole --icon=Yt_Downloader_256.ico `
+        python -m PyInstaller --onefile --noconsole --icon=icon.ico `
           --add-binary "yt-dlp.exe;." `
           --add-binary "ffmpeg.exe;." `
           --name "YT-Downloader" `
