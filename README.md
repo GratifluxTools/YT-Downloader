@@ -145,4 +145,3 @@ MIT License
 **Gratiflux Tools**
 GitHub: [https://github.com/GratifluxTools](https://github.com/GratifluxTools)
 Web: [https://ss872927.stars.ne.jp](https://ss872927.stars.ne.jp)
-Email: [ss872927net@gmail.com](mailto:ss872927net@gmail.com)
