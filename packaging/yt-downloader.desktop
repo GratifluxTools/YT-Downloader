@@ -1,0 +1,9 @@
+[Desktop Entry]
+Type=Application
+Name=YT-Downloader
+Comment=yt-dlp based video / audio downloader
+Exec=__EXEC__
+Icon=yt-downloader
+Terminal=false
+Categories=AudioVideo;Network;
+StartupWMClass=yt_downloader
