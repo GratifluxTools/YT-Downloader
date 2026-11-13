@@ -1,0 +1,18 @@
+[project]
+name = "yt-downloader"
+version = "2.0.0"
+description = "yt-dlp ベースの動画・音声ダウンローダー (Flet 製 / Windows・Linux)"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+  "flet==0.28.3",
+]
+
+[tool.flet]
+org = "com.gratiflux"
+product = "YT-Downloader"
+company = "Gratiflux Tools"
+copyright = "Copyright (C) 2026 Gratiflux Tools"
+
+[tool.flet.app]
+path = "src"
